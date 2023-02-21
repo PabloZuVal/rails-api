@@ -15,13 +15,19 @@ class Api::V1::CreditCardsController < ApplicationController
 
   def create
     # validate if user_id exist
+    @user = User.find(credit_card_params[:user_id])
 
-    @credit_card = CreditCard.new(credit_card_params)
+    if @user
+      @credit_card = CreditCard.new(credit_card_params)
 
-    if @credit_card.save
-      render json: @credit_card, status: :ok
+      if @credit_card.save
+        render json: @credit_card, status: :ok
+      else
+        render json: {msj: 'Credit card not added', status: :unprocessable_entity}
+      end
+
     else
-      render json: {msj: 'Credit card not added', status: :unprocessable_entity}
+      render json: { msj: 'user_id not founded', status: :unprocessable_entity }
     end
   end
 
@@ -30,13 +36,13 @@ class Api::V1::CreditCardsController < ApplicationController
     
   end
 
-  # DELETE /credit_cards/1 or /credit_cards/1.json
+  # DELETE /credit_cards/1 or /credit_cards/1.json ---------------------------- 
   def destroy
     @credit_card.destroy
 
     respond_to do |format|
-      format.html { redirect_to credit_cards_url, notice: "Credit card was successfully destroyed." }
-      format.json { head :no_content }
+      #format.html { redirect_to credit_cards_url, notice: "Credit card was successfully destroyed." }
+      #format.json { head :no_content }
     end
   end
 
