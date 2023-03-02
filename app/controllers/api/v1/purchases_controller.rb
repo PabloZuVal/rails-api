@@ -1,10 +1,10 @@
-class PurchasesController < ApplicationController
+class Api::V1::PurchasesController < ApplicationController
   before_action :set_purchase, only: %i[ show edit update destroy ]
-
-  # GET /purchases or /purchases.json
-  def index
-    @purchases = Purchase.all
-  end
+  skip_before_action :verify_authenticity_token, only: [:create]
+  # # GET /purchases or /purchases.json
+  # def index
+  #   @purchases = Purchase.all
+  # end
 
   # GET /purchases/1 or /purchases/1.json
   def show
@@ -21,17 +21,26 @@ class PurchasesController < ApplicationController
 
   # POST /purchases or /purchases.json
   def create
-    @purchase = Purchase.new(purchase_params)
+    # validate if user_id exist
+    @user = User.find(purchase_params[:user_id])
+    return render json: { msj: 'user_id not founded', status: :unprocessable_entity } unless @user.present?
 
-    respond_to do |format|
-      if @purchase.save
-        format.html { redirect_to purchase_url(@purchase), notice: "Purchase was successfully created." }
-        format.json { render :show, status: :created, location: @purchase }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @purchase.errors, status: :unprocessable_entity }
-      end
-    end
+    @purchase = Purchase.new(purchase_params)
+    return render json: {error: "No se pudo crear la compra"}, status: :unprocessable_entity unless @purchase.save
+    
+    return render json: @purchase, status: :created
+    # @purchase.user_id = params[:user_id]
+    # @purchase.total = 0
+    # @purchase.save
+  
+
+    # respond_to do |format|
+    #   if @purchase.save
+    #     format.json { render :show, status: :created, location: @purchase }
+    #   else
+    #     format.json { render json: @purchase.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   # PATCH/PUT /purchases/1 or /purchases/1.json
@@ -65,6 +74,6 @@ class PurchasesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def purchase_params
-      params.require(:purchase).permit(:total)
+      params.permit(:total, :user_id)
     end
 end

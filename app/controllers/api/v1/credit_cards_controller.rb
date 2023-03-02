@@ -1,34 +1,30 @@
 class Api::V1::CreditCardsController < ApplicationController
+  
   before_action :set_credit_card, only: %i[ show edit update destroy ]
   skip_before_action :verify_authenticity_token, only: [:create]
 
   def index
     @credit_cards = CreditCard.all
+    return render json: {msj: "Credit card list empty"}, status: :unprocessable_entity unless @credit_cards
 
-    if @credit_cards 
-      render json: @credit_cards, status: :ok
-    else
-      render json: {msj: "Credit card list empty"}, status: :unprocessable_entity
-    end
+    return render json: @credit_cards, status: :ok
 
+    # if @credit_cards 
+    #   render json: @credit_cards, status: :ok
+    # else
+    #   render json: {msj: "Credit card list empty"}, status: :unprocessable_entity
+    # end
   end
 
   def create
     # validate if user_id exist
     @user = User.find(credit_card_params[:user_id])
+    return render json: { msj: 'user_id not founded', status: :unprocessable_entity } unless @user.present?
 
-    if @user
-      @credit_card = CreditCard.new(credit_card_params)
+    @credit_card = CreditCard.new(credit_card_params)
+    return render json: { msj: 'Credit card not added', status: :unprocessable_entity } unless @credit_card.save
 
-      if @credit_card.save
-        render json: @credit_card, status: :ok
-      else
-        render json: {msj: 'Credit card not added', status: :unprocessable_entity}
-      end
-
-    else
-      render json: { msj: 'user_id not founded', status: :unprocessable_entity }
-    end
+    return render json: @credit_card, status: :ok
   end
 
   # PATCH/PUT /credit_cards/1 or /credit_cards/1.json
@@ -38,12 +34,7 @@ class Api::V1::CreditCardsController < ApplicationController
 
   # DELETE /credit_cards/1 or /credit_cards/1.json ---------------------------- 
   def destroy
-    @credit_card.destroy
-
-    respond_to do |format|
-      #format.html { redirect_to credit_cards_url, notice: "Credit card was successfully destroyed." }
-      #format.json { head :no_content }
-    end
+    return render json: { msj: 'Credit card not found', status: :unprocessable_entity } unless @credit_card.present?
   end
 
   private
