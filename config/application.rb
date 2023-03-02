@@ -22,6 +22,7 @@ module RailsApi
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
+    #config.mongoid.raise_not_found_error = false
 
     # Configuration for the application, engines, and railties goes here.
     #
