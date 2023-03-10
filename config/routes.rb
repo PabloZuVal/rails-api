@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :invoice_products
   resources :discounts
   resources :categories
   resources :products
@@ -7,6 +8,7 @@ Rails.application.routes.draw do
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   Rails.application.routes.draw do
+  resources :invoice_products
   resources :discounts
   resources :categories
   resources :products
@@ -25,14 +27,23 @@ Rails.application.routes.draw do
         get '/credit_cards', action: :index, controller: :credit_cards
         post '/credit_cards/:id', action: :show, controller: :credit_cards
 
-        # post '/purchase/:user_id/create', action: :create, controller: :purchase
-        post '/invoice/create', action: :create, controller: :invoices
+        get '/invoice', action: :index, controller: :invoices
+        post '/invoice/:purchase_id/create', action: :create, controller: :invoices
         
+        post '/invoice_products/:invoice_id/create', action: :create, controller: :invoice_products
+        get '/invoice_products', action: :index, controller: :invoice_products
+        get '/invoice_products/:invoice_id', action: :show, controller: :invoice_products
+
         get '/purchase', action: :index, controller: :purchases
         post '/purchase/:user_id/create', action: :create, controller: :purchases #Implement
+        get '/purchase/:id', action: :show, controller: :purchases #Implement
+        put '/purchase/:id', action: :update, controller: :purchases #Implement
+        delete '/purchase/:id', action: :destroy, controller: :purchases #Implement
 
         post '/products/create', action: :create, controller: :products
+        get '/products/:id', action: :show, controller: :products
         get '/products', action: :index, controller: :products
+        put '/products/:id', action: :update, controller: :products
 
         post '/categories/create', action: :create, controller: :categories
         get '/categories', action: :index, controller: :categories

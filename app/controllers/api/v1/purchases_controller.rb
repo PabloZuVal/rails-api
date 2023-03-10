@@ -1,10 +1,17 @@
 class Api::V1::PurchasesController < ApplicationController
-  before_action :set_purchase, only: %i[ show edit update destroy ]
+  before_action :purchase_params, only:[ :create ]
+  before_action :set_default_response_format
   skip_before_action :verify_authenticity_token, only: [:create]
+
+  # before_action :set_credit_card, only: %i[ show edit update destroy ]
+  # skip_before_action :verify_authenticity_token, only: [:create]
   # # GET /purchases or /purchases.json
-  # def index
-  #   @purchases = Purchase.all
-  # end
+  def index
+    @purchases = Purchase.all
+    return render json: {error: "No se encontraron compras"}, status: :unprocessable_entity unless @purchases.present?
+    
+    return render json: @purchases, status: :ok
+  end
 
   # GET /purchases/1 or /purchases/1.json
   def show
@@ -26,7 +33,7 @@ class Api::V1::PurchasesController < ApplicationController
     return render json: { msj: 'user_id not founded', status: :unprocessable_entity } unless @user.present?
 
     @purchase = Purchase.new(purchase_params)
-    return render json: {error: "No se pudo crear la compra"}, status: :unprocessable_entity unless @purchase.save
+    return render json: {error: "No se pudo crear la compra", status: :unprocessable_entity} unless @purchase.save
     
     return render json: @purchase, status: :created
     # @purchase.user_id = params[:user_id]
@@ -43,27 +50,27 @@ class Api::V1::PurchasesController < ApplicationController
     # end
   end
 
-  # PATCH/PUT /purchases/1 or /purchases/1.json
-  def update
-    respond_to do |format|
-      if @purchase.update(purchase_params)
-        format.html { redirect_to purchase_url(@purchase), notice: "Purchase was successfully updated." }
-        format.json { render :show, status: :ok, location: @purchase }
-      else
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @purchase.errors, status: :unprocessable_entity }
-      end
-    end
+  def create_invoice
+    
   end
+
+  # PATCH/PUT /purchases/1 or /purchases/1.json
+  # def update
+  #   respond_to do |format|
+  #     if @purchase.update(purchase_params)
+  #       format.html { redirect_to purchase_url(@purchase), notice: "Purchase was successfully updated." }
+  #       format.json { render :show, status: :ok, location: @purchase }
+  #     else
+  #       format.html { render :edit, status: :unprocessable_entity }
+  #       format.json { render json: @purchase.errors, status: :unprocessable_entity }
+  #     end
+  #   end
+  # end
 
   # DELETE /purchases/1 or /purchases/1.json
   def destroy
     @purchase.destroy
 
-    respond_to do |format|
-      format.html { redirect_to purchases_url, notice: "Purchase was successfully destroyed." }
-      format.json { head :no_content }
-    end
   end
 
   private
@@ -75,5 +82,9 @@ class Api::V1::PurchasesController < ApplicationController
     # Only allow a list of trusted parameters through.
     def purchase_params
       params.permit(:total, :user_id)
+    end
+
+    def set_default_response_format
+      request.format = :json
     end
 end

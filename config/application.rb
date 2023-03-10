@@ -14,23 +14,34 @@ require "action_view/railtie"
 require "action_cable/engine"
 # require "rails/test_unit/railtie"
 
+# Custom
+require "trust_gem"
+# require "trust_gem/trace_capture"
+# require "trust_gem/scope_check"
+# require "trust_gem/log_events"
+require "trust_gem/authorization_check"
+
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
 module RailsApi
   class Application < Rails::Application
+
+
+    # Load dotenv only in development or test environment
+    if ['development', 'test'].include? ENV['RAILS_ENV']
+      Dotenv::Railtie.load
+    end
+
+    HOSTNAME = ENV['HOSTNAME']
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
-    #config.mongoid.raise_not_found_error = false
-
-    # Configuration for the application, engines, and railties goes here.
-    #
-    # These settings can be overridden in specific environments using the files
-    # in config/environments, which are processed later.
-    #
-    # config.time_zone = "Central Time (US & Canada)"
-    # config.eager_load_paths << Rails.root.join("extras")
+    ENV['PROJECT_VERSION'] = '1.0.0'
+    ENV['PROJECT_NAME'] = 'Trust Example'
+    ENV['FORCE_AUTHENTICATION'] = "true"
 
     # Don't generate system test files.
     config.generators.system_tests = nil

@@ -29,7 +29,9 @@ gem "jbuilder"
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
+gem "trust_gem", '~> 2.4.1', git: 'https://gitlab.com/trustchile/publib/lat_trust_backend_library_trust_gem.git', :tag => 'v2.4.1'
 
+gem 'dotenv-rails', groups: [:development, :test]
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
 

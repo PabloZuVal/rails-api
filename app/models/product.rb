@@ -6,5 +6,6 @@ class Product
   field :description, type: String
   field :stock, type: Integer
   field :price, type: Integer
-  belongs_to :invoice
+  belongs_to :category
+  has_many :invoice_product
 end

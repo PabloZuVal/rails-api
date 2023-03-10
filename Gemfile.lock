@@ -1,3 +1,14 @@
+GIT
+  remote: https://gitlab.com/trustchile/publib/lat_trust_backend_library_trust_gem.git
+  revision: 982e1d4744308d617a7fb1cd90017a93af98583b
+  tag: v2.4.1
+  specs:
+    trust_gem (2.4.1)
+      railties (>= 5)
+      request_store (~> 1.5)
+      sentry-rails
+      sentry-ruby
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -77,6 +88,10 @@ GEM
     debug (1.7.1)
       irb (>= 1.5.0)
       reline (>= 0.3.1)
+    dotenv (2.8.1)
+    dotenv-rails (2.8.1)
+      dotenv (= 2.8.1)
+      railties (>= 3.2)
     erubi (1.12.0)
     globalid (1.1.0)
       activesupport (>= 5.0)
@@ -159,7 +174,14 @@ GEM
     rake (13.0.6)
     reline (0.3.2)
       io-console (~> 0.5)
+    request_store (1.5.1)
+      rack (>= 1.4)
     ruby2_keywords (0.0.5)
+    sentry-rails (5.8.0)
+      railties (>= 5.0)
+      sentry-ruby (~> 5.8.0)
+    sentry-ruby (5.8.0)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
     sprockets (4.2.0)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
@@ -196,6 +218,7 @@ PLATFORMS
 DEPENDENCIES
   bootsnap
   debug
+  dotenv-rails
   importmap-rails
   jbuilder
   mongoid (~> 8.0, >= 8.0.3)
@@ -203,6 +226,7 @@ DEPENDENCIES
   rails (~> 7.0.4, >= 7.0.4.2)
   sprockets-rails
   stimulus-rails
+  trust_gem (~> 2.4.1)!
   turbo-rails
   tzinfo-data
   web-console
