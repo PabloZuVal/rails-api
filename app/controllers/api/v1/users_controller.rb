@@ -1,7 +1,8 @@
 class Api::V1::UsersController < ApplicationController
-
+    include ResponseHelper
     before_action only:[:show, :updateUser, :deleteUser]
     skip_before_action :verify_authenticity_token, only: [:create,:updateUser,:deleteUser]
+
 
     # GET /users
     def users        
@@ -25,8 +26,9 @@ class Api::V1::UsersController < ApplicationController
 
     def show
         @user = User.find(params[:id])
-        return render json: { msj: 'User not found', status: :unprocessable_entity } unless @user.present?
-
+        # return render json: { msj: 'User not found', status: :unprocessable_entity } unless @user.present?
+        return not_found_render("user", @user) unless @user.present?
+        
         return render json: @user, status: :ok
     end
     

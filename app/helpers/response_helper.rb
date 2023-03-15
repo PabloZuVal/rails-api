@@ -53,7 +53,7 @@ module ResponseHelper
     # fail
   
     def duplicate_resource_render(resource, message)
-      fail_render('Duplicated', 409, resource, message, nil)
+      fail_render('Duplicated', 409, resource, message)
     end
   
     def duplicate_resource_render_without_payload(resource)
