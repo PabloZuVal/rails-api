@@ -1,3 +1,5 @@
+require 'net/http'
+
 class Api::V1::ProductsController < ApplicationController
   before_action :set_product, only: %i[ show update destroy ]
   before_action :set_default_response_format
@@ -24,16 +26,6 @@ class Api::V1::ProductsController < ApplicationController
     @product = Product.new
   end
 
-  # GET /products/1/edit
-  # def edit
-  #   # edit product
-  #   @product = Product.find(params[:id])
-  #   return render json: { msj: "Product not found" }, status: :unprocessable_entity unless @product
-      
-  #   return render json: @product, status: :ok
-
-  # end
-
   # POST /products or /products.json
   def create
     @product = Product.new(product_params)
@@ -50,14 +42,24 @@ class Api::V1::ProductsController < ApplicationController
     return render json: @product, status: :ok
   end
 
-  # DELETE /products/1 or /products/1.json
-  def destroy
-    @product.destroy
+  def get_pokemons
+    uri = URI('https://pokeapi.co/api/v2/pokemon/')
+    response = Net::HTTP.get(uri)
+    response = JSON.parse(response)
 
-    respond_to do |format|
-      #format.html { redirect_to products_url, notice: "Product was successfully destroyed." }
-      #format.json { head :no_content }
+    response["results"].each do |product|
+      # print "\n product: \n"
+      # print product["name"]
+      # print "\n"
+      # If pokemon already exists, it is not saved
+      @product = Product.find_by(name: product["name"])
+      next if @product
+
+      @product = Product.new(name: product["name"], description: product["url"], stock: 0, price: 0, category_id: "63f78448c517c21e4eb666f9")
+      return render json: { msj: "Pokemon is not saverd", error: @product.errors, status: :unprocessable_entity} unless @product.save
     end
+
+    return render json: { msj: "Products requested" }, status: :ok
   end
 
   private

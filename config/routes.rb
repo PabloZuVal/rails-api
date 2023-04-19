@@ -47,6 +47,8 @@ Rails.application.routes.draw do
 
         post '/categories/create', action: :create, controller: :categories
         get '/categories', action: :index, controller: :categories
+
+        get '/get_pokemons', action: :get_pokemons, controller: :products
       end
     end
   end    

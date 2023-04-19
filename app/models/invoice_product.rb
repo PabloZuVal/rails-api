@@ -28,26 +28,32 @@ class InvoiceProduct
       textStock = "Product " + @product.name + " out of stock"
       return ApiResponse.new(false, textStock, :unprocessable_entity,"Current stock : " + @product.stock.to_s) if @product.stock < product[:quantity]
 
+      # Create invoice product
+      @invoice_product = InvoiceProduct.new(:details => params[:details], :total_price => 1234, total_purchase: 1234, :invoice_id => params[:invoice_id], :product_id => @product[:_id])
+      return ApiResponse.new(false, "InvoiceProduct not created", @invoice_product.errors) unless @invoice_product.save
+
+      # Update stock product
       if @product.stock.present?
         @product.stock = @product.stock - product[:quantity]
         @product.save
       end
 
       total_purchase += @product.price * product[:quantity]
-      # products << @product
+
+      details << { product: @product, details: @invoice_product }
 
     end
     
-    params[:product_ids].each do |product|
-      @product_search = Product.where(:id => product[:id_product]).first
+    # params[:product_ids].each do |product|
+    #   @product_search = Product.where(:id => product[:id_product]).first
 
-      return ApiResponse.new(false, "Product not found", :unprocessable_entity, []) unless @product_search.present?
+    #   return ApiResponse.new(false, "Product not found", :unprocessable_entity, []) unless @product_search.present?
       
-      @invoice_product = InvoiceProduct.new(:details => params[:details], :total_price => 1234, total_purchase: 1234, :invoice_id => params[:invoice_id], :product_id => @product_search[:_id])
-      return ApiResponse.new(false, "InvoiceProduct not created", @invoice_product.errors) unless @invoice_product.save
+    #   @invoice_product = InvoiceProduct.new(:details => params[:details], :total_price => 1234, total_purchase: 1234, :invoice_id => params[:invoice_id], :product_id => @product_search[:_id])
+    #   return ApiResponse.new(false, "InvoiceProduct not created", @invoice_product.errors) unless @invoice_product.save
 
-      details << { product: @product_search, details: @invoice_product }
-    end
+    #   details << { product: @product_search, details: @invoice_product }
+    # end
 
     return ApiResponse.new(true, "invoice product created !", false, details)
   end
