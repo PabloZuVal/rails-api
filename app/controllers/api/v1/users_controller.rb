@@ -3,7 +3,6 @@ class Api::V1::UsersController < ApplicationController
     before_action only:[:show, :updateUser, :deleteUser]
     skip_before_action :verify_authenticity_token, only: [:create,:updateUser,:deleteUser]
 
-
     # GET /users
     def users        
         @users = User.all
@@ -23,7 +22,6 @@ class Api::V1::UsersController < ApplicationController
         return render json: @user, status: :ok
     end
 
-
     def show
         @user = User.find(params[:id])
         # return render json: { msj: 'User not found', status: :unprocessable_entity } unless @user.present?
@@ -40,15 +38,6 @@ class Api::V1::UsersController < ApplicationController
 
         return render json: @user, status: :ok
 
-        # if @user
-        #     if @user.update(userparams)
-        #         render json: @user, status: :ok
-        #     else
-        #         render json: {msj: "Update Failed"}, status: :unprocessable_entity
-        #     end
-        # else
-        #     render json:{msj: "User not found"} , status: :unprocessable_entity
-        # end
     end
 
     def deleteUser
@@ -57,16 +46,6 @@ class Api::V1::UsersController < ApplicationController
         return render json: {msj: "Delete failed"}, status: :unprocessable_entity unless @user.destroy()
 
         return render json: {msj: "User Deleted"}, status: :ok
-
-        # if @user
-        #     if @user.destroy()
-        #         render json: {msj: "User Deleted"}, status: :ok
-        #     else
-        #         render json: {msj: "Delete failed"}, status: :unprocessable_entity
-        #     end
-        # else
-        #     render json: {msj:"User not found"}, status: unprocessable_entity
-        # end
     end
 
     private
@@ -78,5 +57,4 @@ class Api::V1::UsersController < ApplicationController
             @user = User.find(params[:id])
         end
     
-
 end

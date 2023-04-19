@@ -13,19 +13,6 @@ class Api::V1::PurchasesController < ApplicationController
     return render json: @purchases, status: :ok
   end
 
-  # GET /purchases/1 or /purchases/1.json
-  def show
-  end
-
-  # GET /purchases/new
-  def new
-    @purchase = Purchase.new
-  end
-
-  # GET /purchases/1/edit
-  def edit
-  end
-
   # POST /purchases or /purchases.json
   def create
     # validate if user_id exist
@@ -36,36 +23,16 @@ class Api::V1::PurchasesController < ApplicationController
     return render json: {error: "No se pudo crear la compra", status: :unprocessable_entity} unless @purchase.save
     
     return render json: @purchase, status: :created
-    # @purchase.user_id = params[:user_id]
-    # @purchase.total = 0
-    # @purchase.save
-  
 
-    # respond_to do |format|
-    #   if @purchase.save
-    #     format.json { render :show, status: :created, location: @purchase }
-    #   else
-    #     format.json { render json: @purchase.errors, status: :unprocessable_entity }
-    #   end
-    # end
   end
 
   def create_invoice
+    #create invoice in purcache controller
+
+    # ....
+
     
   end
-
-  # PATCH/PUT /purchases/1 or /purchases/1.json
-  # def update
-  #   respond_to do |format|
-  #     if @purchase.update(purchase_params)
-  #       format.html { redirect_to purchase_url(@purchase), notice: "Purchase was successfully updated." }
-  #       format.json { render :show, status: :ok, location: @purchase }
-  #     else
-  #       format.html { render :edit, status: :unprocessable_entity }
-  #       format.json { render json: @purchase.errors, status: :unprocessable_entity }
-  #     end
-  #   end
-  # end
 
   # DELETE /purchases/1 or /purchases/1.json
   def destroy

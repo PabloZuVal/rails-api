@@ -6,19 +6,6 @@ class DiscountsController < ApplicationController
     @discounts = Discount.all
   end
 
-  # GET /discounts/1 or /discounts/1.json
-  def show
-  end
-
-  # GET /discounts/new
-  def new
-    @discount = Discount.new
-  end
-
-  # GET /discounts/1/edit
-  def edit
-  end
-
   # POST /discounts or /discounts.json
   def create
     @discount = Discount.new(discount_params)
@@ -29,19 +16,6 @@ class DiscountsController < ApplicationController
         #format.json { render :show, status: :created, location: @discount }
       else
         #format.html { render :new, status: :unprocessable_entity }
-        #format.json { render json: @discount.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /discounts/1 or /discounts/1.json
-  def update
-    respond_to do |format|
-      if @discount.update(discount_params)
-        #format.html { redirect_to discount_url(@discount), notice: "Discount was successfully updated." }
-        #format.json { render :show, status: :ok, location: @discount }
-      else
-        #format.html { render :edit, status: :unprocessable_entity }
         #format.json { render json: @discount.errors, status: :unprocessable_entity }
       end
     end
